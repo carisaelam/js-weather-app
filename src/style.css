@@ -1,0 +1,125 @@
+/* Josh Comeau CSS Reset */
+
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+}
+
+body {
+  /* 3. Add accessible line-height */
+  line-height: 1.5;
+  /* 4. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 5. Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 6. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* 7. Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* 8. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+/*
+    9. Create a root stacking context
+  */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* End CSS Reset */
+
+:root {
+  --primary-font: 'Figtree', system-ui, sans-serif;
+  --header-font: 'Montserrat', system-ui, serif;
+
+  --primary-blue: #0066dd;
+  --accent-coral: #f5a623;
+
+  --light-gray: #f5f5f5;
+  --mid-gray: #9b9b9b;
+  --dark-charcoal: #333333;
+
+  --teal: #1abc9c;
+  --warm-beige: #f1e2c6;
+
+  --off-white: #ffffff;
+  --light-taupe: #eaeaea;
+
+  --error-red: #e74c3c;
+  --success-green: #2ecc71;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--header-font);
+  color: var(--dark-charcoal);
+}
+
+button {
+  background-color: var(--primary-blue);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-weight: bold;
+  color: var(--off-white);
+}
+
+button:hover {
+  background-color: var(--accent-coral);
+  cursor: pointer;
+  transform: scale(1.02);
+  transition: 0.1s;
+}
+
+body {
+  font-family: var(--primary-font);
+  color: var(--dark-charcoal);
+  background-color: var(--light-gray);
+}

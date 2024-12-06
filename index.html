@@ -3,21 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Figtree:300,regular,500,600,700,800,900,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css" />
+
     <title>Document</title>
   </head>
   <body>
-    <form>
-      <label for="zipcode">Where?</label>
-      <input type="text" id="zipcode" name="zipcode" />
+    <header>
+      <h1>Get Weather</h1>
+    </header>
+    <main>
+      <form>
+        <label for="zipcode">Where?</label>
+        <input type="text" id="zipcode" name="zipcode" />
 
-      <label for="units">Units</label>
-      <select name="units" id="units">
-        <option value="metric">Metric</option>
-        <option value="us">US</option>
-      </select>
+        <label for="units">Units</label>
+        <select name="units" id="units">
+          <option value="metric">Metric</option>
+          <option value="us">US</option>
+        </select>
 
-      <button id="submit__button">Get weather</button>
-    </form>
+        <button id="submit__button">Get weather</button>
+      </form>
+
+      <div class="weather__container">
+        <h2>Current Weather</h2>
+        <div class="current__weather__container"></div>
+      </div>
+      
+    </main>
     <script src="/src/script.js" type="module"></script>
   </body>
 </html>

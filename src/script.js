@@ -18,8 +18,9 @@ async function handleWeatherRequest(e) {
 
   const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
 
-  await parseCurrentWeatherData(url);
+  let currentWeather = await parseCurrentWeatherData(url);
   await parseWeatherForecast(url);
+  await displayCurrentWeather(currentWeather);
 }
 
 // Event listeners
@@ -84,4 +85,21 @@ async function parseWeatherForecast(url) {
 
   console.log(`15-Day Forecast`, forecast);
   return forecast;
+}
+
+// Display current weather
+function displayCurrentWeather(weather) {
+  const currentWeatherContainer = document.querySelector(
+    '.current__weather__container'
+  );
+
+  console.log('weather', weather);
+
+  currentWeatherContainer.innerHTML = `
+  <p>Current Weather in ${weather.locationName}</p>
+  <p>Overview: ${weather.description}</p>
+  <p>Temperature: ${weather.temp}°</p>
+  <p>Conditions: ${weather.conditions}</p>
+  <p>Chance of Rain: ${weather.precipprob}%</p>
+  `;
 }
