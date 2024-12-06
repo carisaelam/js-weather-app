@@ -4,26 +4,32 @@ const submitButton = document.getElementById('submit__button');
 
 // Variables
 const apiKey = import.meta.env.VITE_API_KEY;
-const unitGroup = 'us'; // or 'metric'
-let location;
+
+// Functions
+
+async function handleWeatherRequest(e) {
+  e.preventDefault();
+
+  const location = zipcodeInputField.value;
+  if (!location) return console.error('Please enter location');
+
+  const selectedUnit = document.querySelector('input[name="units"]:checked');
+  const unitGroup = selectedUnit ? selectedUnit.value : 'us';
+
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
+
+  await parseCurrentWeatherData(url);
+  await parseWeatherForecast(url);
+}
 
 // Event listeners
 
 // Runs parseCurrent and parseWeather
-submitButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  location = zipcodeInputField.value;
-
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
-
-  parseCurrentWeatherData(url);
-  parseWeatherForecast(url);
-});
+submitButton.addEventListener('click', handleWeatherRequest);
 
 // Updates value of location with input change
 zipcodeInputField.addEventListener('change', (e) => {
-  location = e.target.value;
-  console.log('location', location);
+  console.log('Location updated: ', e.target.value);
 });
 
 // Fetch data from API
@@ -43,68 +49,44 @@ async function fetchData(path) {
 
 // Parse current weather
 async function parseCurrentWeatherData(url) {
-  try {
-    const response = await fetchData(url);
+  const response = await fetchData(url);
 
-    if (!response) {
-      console.error('No response data');
-      return null;
-    }
-    console.log('response', response);
-
-    const currentWeather = {
-      description: response.description,
-      locationName: response.resolvedAddress,
-      current: {
-        temp: response.currentConditions.temp,
-        icon: response.currentConditions.icon,
-        conditions: response.currentConditions.conditions,
-        precipprob: response.currentConditions.precipprob,
-      },
-    };
-
-    console.log(
-      `Current weather for ${currentWeather.locationName}`,
-      currentWeather
-    );
-    return currentWeather;
-  } catch (error) {
-    console.error('Error parsing current weather: ', error);
+  if (!response) {
+    console.error('No response data');
     return null;
   }
+  console.log('response', response);
+
+  const currentWeather = {
+    description: response.description,
+    locationName: response.resolvedAddress,
+    temp: response.currentConditions.temp,
+    icon: response.currentConditions.icon,
+    conditions: response.currentConditions.conditions,
+    precipprob: response.currentConditions.precipprob,
+  };
+
+  console.log(
+    `Current weather for ${currentWeather.locationName}`,
+    currentWeather
+  );
+  return currentWeather;
 }
 
 // Parse 15 day forecast
 async function parseWeatherForecast(url) {
-  try {
-    const response = await fetchData(url);
+  const response = await fetchData(url);
+  if (!response) return;
 
-    if (!response) {
-      console.error('No response data');
-      return null;
-    }
+  const forecast = response.days.map((day) => ({
+    date: day.datetime,
+    description: day.description,
+    mintemp: day.tempmin,
+    maxtemp: day.tempmax,
+    icon: day.icon,
+    precipprop: day.precipprob,
+  }));
 
-    const days = response.days;
-
-    let forecast = [];
-
-    days.forEach((day) => {
-      let dailyForecast = {
-        date: day.datetime,
-        description: day.description,
-        mintemp: day.tempmin,
-        maxtemp: day.tempmax,
-        icon: day.icon,
-        precipprop: day.precipprob,
-      };
-
-      forecast.push(dailyForecast);
-    });
-
-    console.log(`Forecast for ${location}`, forecast);
-    return forecast;
-  } catch (error) {
-    console.error('Error parsingWeatherForecast: ', error);
-    return null;
-  }
+  console.log(`15-Day Forecast`, forecast);
+  return forecast;
 }
