@@ -20,15 +20,13 @@ submitButton.addEventListener('click', (e) => {
   parseWeatherForecast(url);
 });
 
-// Updates value of location with input change 
+// Updates value of location with input change
 zipcodeInputField.addEventListener('change', (e) => {
   location = e.target.value;
   console.log('location', location);
 });
 
-
-
-// Fetch data from API 
+// Fetch data from API
 async function fetchData(path) {
   try {
     const response = await fetch(path);
@@ -39,48 +37,74 @@ async function fetchData(path) {
     return data;
   } catch (error) {
     console.error('Error fetching data: ', error);
+    return null;
   }
 }
 
 // Parse current weather
 async function parseCurrentWeatherData(url) {
-  const response = await fetchData(url);
+  try {
+    const response = await fetchData(url);
 
-  const parsedData = {
-    description: response.description,
-    current: {
-      temp: response.currentConditions.temp,
-      icon: response.currentConditions.icon,
-      conditions: response.currentConditions.conditions,
-      precipprob: response.currentConditions.precipprob,
-    },
-  };
+    if (!response) {
+      console.error('No response data');
+      return null;
+    }
+    console.log('response', response);
 
-  console.log(`Current weather for ${location}`, parsedData);
-  return parsedData;
+    const currentWeather = {
+      description: response.description,
+      locationName: response.resolvedAddress,
+      current: {
+        temp: response.currentConditions.temp,
+        icon: response.currentConditions.icon,
+        conditions: response.currentConditions.conditions,
+        precipprob: response.currentConditions.precipprob,
+      },
+    };
+
+    console.log(
+      `Current weather for ${currentWeather.locationName}`,
+      currentWeather
+    );
+    return currentWeather;
+  } catch (error) {
+    console.error('Error parsing current weather: ', error);
+    return null;
+  }
 }
 
 // Parse 15 day forecast
 async function parseWeatherForecast(url) {
-  const response = await fetchData(url);
+  try {
+    const response = await fetchData(url);
 
-  const days = response.days;
+    if (!response) {
+      console.error('No response data');
+      return null;
+    }
 
-  let forecast = [];
+    const days = response.days;
 
-  days.forEach((day) => {
-    let dailyForecast = {
-      date: day.datetime,
-      description: day.description,
-      mintemp: day.tempmin,
-      maxtemp: day.tempmax,
-      icon: day.icon,
-      precipprop: day.precipprob,
-    };
+    let forecast = [];
 
-    forecast.push(dailyForecast);
-  });
+    days.forEach((day) => {
+      let dailyForecast = {
+        date: day.datetime,
+        description: day.description,
+        mintemp: day.tempmin,
+        maxtemp: day.tempmax,
+        icon: day.icon,
+        precipprop: day.precipprob,
+      };
 
-  console.log(`Forecast for ${location}`, forecast);
-  return forecast;
+      forecast.push(dailyForecast);
+    });
+
+    console.log(`Forecast for ${location}`, forecast);
+    return forecast;
+  } catch (error) {
+    console.error('Error parsingWeatherForecast: ', error);
+    return null;
+  }
 }
