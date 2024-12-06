@@ -1,11 +1,34 @@
+// DOM Elements
+const zipcodeInputField = document.getElementById('zipcode');
+const submitButton = document.getElementById('submit__button');
+
+// Variables
 const apiKey = import.meta.env.VITE_API_KEY;
-const location = '90210';
 const unitGroup = 'us'; // or 'metric'
+let location;
 
-const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
+// Event listeners
 
-console.log('url', url);
+// Runs parseCurrent and parseWeather
+submitButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  location = zipcodeInputField.value;
 
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
+
+  parseCurrentWeatherData(url);
+  parseWeatherForecast(url);
+});
+
+// Updates value of location with input change 
+zipcodeInputField.addEventListener('change', (e) => {
+  location = e.target.value;
+  console.log('location', location);
+});
+
+
+
+// Fetch data from API 
 async function fetchData(path) {
   try {
     const response = await fetch(path);
@@ -19,7 +42,8 @@ async function fetchData(path) {
   }
 }
 
-async function parseCurrentWeatherData() {
+// Parse current weather
+async function parseCurrentWeatherData(url) {
   const response = await fetchData(url);
 
   const parsedData = {
@@ -36,7 +60,8 @@ async function parseCurrentWeatherData() {
   return parsedData;
 }
 
-async function parseWeatherForecast() {
+// Parse 15 day forecast
+async function parseWeatherForecast(url) {
   const response = await fetchData(url);
 
   const days = response.days;
@@ -47,10 +72,10 @@ async function parseWeatherForecast() {
     let dailyForecast = {
       date: day.datetime,
       description: day.description,
-      mintemp: day.tempmin, 
+      mintemp: day.tempmin,
       maxtemp: day.tempmax,
-      icon: day.icon, 
-      precipprop: day.precipprob
+      icon: day.icon,
+      precipprop: day.precipprob,
     };
 
     forecast.push(dailyForecast);
@@ -59,6 +84,3 @@ async function parseWeatherForecast() {
   console.log(`Forecast for ${location}`, forecast);
   return forecast;
 }
-
-parseCurrentWeatherData();
-parseWeatherForecast();
