@@ -27,11 +27,6 @@ async function handleWeatherRequest(e) {
 // Runs parseCurrent and parseWeather
 submitButton.addEventListener('click', handleWeatherRequest);
 
-// Updates value of location with input change
-zipcodeInputField.addEventListener('change', (e) => {
-  console.log('Location updated: ', e.target.value);
-});
-
 // Fetch data from API
 async function fetchData(path) {
   try {
