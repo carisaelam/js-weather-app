@@ -47,13 +47,25 @@ async function parseCurrentWeatherData(url) {
   return currentWeather;
 }
 
+// Format date
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const options = { weekday: 'short' };
+  const dayOfWeek = date.toLocaleDateString(undefined, options);
+
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${dayOfWeek} ${month}/${day}`;
+}
+
 // Parse 15 day forecast
 async function parseWeatherForecast(url) {
   const response = await fetchData(url);
   if (!response) return;
 
   const forecast = response.days.map((day) => ({
-    date: day.datetime,
+    date: formatDate(day.datetime),
     description: day.description,
     mintemp: day.tempmin,
     maxtemp: day.tempmax,
@@ -77,8 +89,9 @@ async function handleWeatherRequest(e) {
   const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
 
   let currentWeather = await parseCurrentWeatherData(url);
-  await parseWeatherForecast(url);
+  let forecast = await parseWeatherForecast(url);
   await displayCurrentWeather(currentWeather);
+  await displayForecast(forecast);
 }
 
 // Display current weather
@@ -90,10 +103,10 @@ function displayCurrentWeather(weather) {
   console.log('weather', weather);
 
   currentWeatherContainer.textContent = '';
-  currentWeatherContainer.classList.remove('hidden')
+  currentWeatherContainer.classList.remove('hidden');
 
   const locationElement = document.createElement('h2');
-  locationElement.classList.add('location__element')
+  locationElement.classList.add('location__element');
   locationElement.textContent = `Current Weather in ${weather.locationName}`;
 
   const descriptionElement = document.createElement('p');
@@ -104,7 +117,7 @@ function displayCurrentWeather(weather) {
   iconElement.alt = `${weather.icon} icon`;
 
   const tempElement = document.createElement('p');
-  tempElement.classList.add('temp__element')
+  tempElement.classList.add('temp__element');
   tempElement.textContent = `${weather.temp}°`;
 
   const conditionsElement = document.createElement('p');
@@ -121,8 +134,32 @@ function displayCurrentWeather(weather) {
     precipProbElement,
     descriptionElement,
   ].forEach((element) => {
-    element.classList.add('element')
+    element.classList.add('element');
     currentWeatherContainer.appendChild(element);
+  });
+}
+
+// Display forecast
+function displayForecast(forecast) {
+  const forecastContainer = document.querySelector('.forecast__container');
+
+  console.log('forecast', forecast);
+
+  forecastContainer.textContent = '';
+  forecastContainer.classList.remove('hidden');
+
+  forecast.forEach((day) => {
+    const card = document.createElement('div');
+    card.innerHTML = `
+          <p>${day.date}</p>
+          <img src="src/icons/${day.icon}.png" alt="" />
+          <p>${day.mintemp}°–${day.maxtemp}°</p>
+          <p>💧 ${day.precipprop}%</p>
+
+    `;
+
+    card.classList.add('forecast__card');
+    forecastContainer.appendChild(card);
   });
 }
 
