@@ -113,7 +113,7 @@ function displayCurrentWeather(weather) {
   descriptionElement.textContent = `${weather.description}`;
 
   const iconElement = document.createElement('img');
-  iconElement.src = `public/icons/${weather.icon}.png`;
+  iconElement.src = `/icons/${weather.icon}.png`;
   iconElement.alt = `${weather.icon} icon`;
 
   const tempElement = document.createElement('p');
@@ -152,7 +152,7 @@ function displayForecast(forecast) {
     const card = document.createElement('div');
     card.innerHTML = `
           <p class="forecast__day">${day.date}</p>
-          <img src="public/icons/${day.icon}.png" alt="" />
+          <img src="/icons/${day.icon}.png" alt="" />
           <p>${day.mintemp}°–${day.maxtemp}°</p>
           <p>💧 ${day.precipprop}%</p>
 
