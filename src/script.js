@@ -1,5 +1,4 @@
 // DOM Elements
-const zipcodeInputField = document.getElementById('zipcode');
 const submitButton = document.getElementById('submit__button');
 
 // Variables
@@ -10,11 +9,13 @@ const apiKey = import.meta.env.VITE_API_KEY;
 async function handleWeatherRequest(e) {
   e.preventDefault();
 
-  const location = zipcodeInputField.value;
+  const location = document.getElementById('zipcode').value;
   if (!location) return console.error('Please enter location');
 
-  const selectedUnit = document.querySelector('input[name="units"]:checked');
-  const unitGroup = selectedUnit ? selectedUnit.value : 'us';
+  const selectedUnit = document.querySelector('#units').value;
+  const unitGroup = selectedUnit;
+
+  console.log(`Selected unit group: ${unitGroup}`);
 
   const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
 
