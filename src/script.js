@@ -93,7 +93,7 @@ function displayCurrentWeather(weather) {
   currentWeatherContainer.classList.remove('hidden')
 
   const locationElement = document.createElement('h2');
-  locationElement.classList.add('locationElement')
+  locationElement.classList.add('location__element')
   locationElement.textContent = `Current Weather in ${weather.locationName}`;
 
   const descriptionElement = document.createElement('p');
@@ -104,6 +104,7 @@ function displayCurrentWeather(weather) {
   iconElement.alt = `${weather.icon} icon`;
 
   const tempElement = document.createElement('p');
+  tempElement.classList.add('temp__element')
   tempElement.textContent = `${weather.temp}°`;
 
   const conditionsElement = document.createElement('p');
