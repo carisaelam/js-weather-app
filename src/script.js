@@ -6,29 +6,6 @@ const apiKey = import.meta.env.VITE_API_KEY;
 
 // Functions
 
-async function handleWeatherRequest(e) {
-  e.preventDefault();
-
-  const location = document.getElementById('zipcode').value;
-  if (!location) return console.error('Please enter location');
-
-  const selectedUnit = document.querySelector('#units').value;
-  const unitGroup = selectedUnit;
-
-  console.log(`Selected unit group: ${unitGroup}`);
-
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
-
-  let currentWeather = await parseCurrentWeatherData(url);
-  await parseWeatherForecast(url);
-  await displayCurrentWeather(currentWeather);
-}
-
-// Event listeners
-
-// Runs parseCurrent and parseWeather
-submitButton.addEventListener('click', handleWeatherRequest);
-
 // Fetch data from API
 async function fetchData(path) {
   try {
@@ -104,3 +81,24 @@ function displayCurrentWeather(weather) {
   <p>Chance of Rain: ${weather.precipprob}%</p>
   `;
 }
+
+async function handleWeatherRequest(e) {
+  e.preventDefault();
+
+  const location = document.getElementById('zipcode').value;
+  if (!location) return console.error('Please enter location');
+
+  const selectedUnit = document.querySelector('#units').value;
+  const unitGroup = selectedUnit;
+
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=${unitGroup}&key=${apiKey}`;
+
+  let currentWeather = await parseCurrentWeatherData(url);
+  await parseWeatherForecast(url);
+  await displayCurrentWeather(currentWeather);
+}
+
+// Event listeners
+
+// Runs parseCurrent and parseWeather
+submitButton.addEventListener('click', handleWeatherRequest);
