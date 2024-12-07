@@ -151,7 +151,7 @@ function displayForecast(forecast) {
   forecast.forEach((day) => {
     const card = document.createElement('div');
     card.innerHTML = `
-          <p>${day.date}</p>
+          <p class="forecast__day">${day.date}</p>
           <img src="src/icons/${day.icon}.png" alt="" />
           <p>${day.mintemp}°–${day.maxtemp}°</p>
           <p>💧 ${day.precipprop}%</p>
