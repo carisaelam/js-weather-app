@@ -21,23 +21,27 @@
     </header>
     <main>
       <form>
-        <label for="zipcode">Where?</label>
-        <input type="text" id="zipcode" name="zipcode" />
+        <div class="form__section">
+          <label for="zipcode">Where?</label>
+          <input type="text" id="zipcode" name="zipcode" />
+        </div>
 
-        <label for="units">Units</label>
-        <select name="units" id="units">
-          <option value="us">US</option>
-          <option value="metric">Metric</option>
-        </select>
+        <div class="form__section">
+          <label for="units">Units</label>
+          <select name="units" id="units">
+            <option value="us">US</option>
+            <option value="metric">Metric</option>
+          </select>
+        </div>
 
         <button id="submit__button">Get weather</button>
       </form>
 
       <div class="weather__container">
-        <h2>Current Weather</h2>
-        <div class="current__weather__container"></div>
+        <div class="current__weather__container hidden">
+        
+        </div>
       </div>
-
     </main>
     <script src="/src/script.js" type="module"></script>
   </body>

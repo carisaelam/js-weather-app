@@ -65,23 +65,6 @@ async function parseWeatherForecast(url) {
   return forecast;
 }
 
-// Display current weather
-function displayCurrentWeather(weather) {
-  const currentWeatherContainer = document.querySelector(
-    '.current__weather__container'
-  );
-
-  console.log('weather', weather);
-
-  currentWeatherContainer.innerHTML = `
-  <p>Current Weather in ${weather.locationName}</p>
-  <p>Overview: ${weather.description}</p>
-  <p>Temperature: ${weather.temp}°</p>
-  <p>Conditions: ${weather.conditions}</p>
-  <p>Chance of Rain: ${weather.precipprob}%</p>
-  `;
-}
-
 async function handleWeatherRequest(e) {
   e.preventDefault();
 
@@ -96,6 +79,50 @@ async function handleWeatherRequest(e) {
   let currentWeather = await parseCurrentWeatherData(url);
   await parseWeatherForecast(url);
   await displayCurrentWeather(currentWeather);
+}
+
+// Display current weather
+function displayCurrentWeather(weather) {
+  const currentWeatherContainer = document.querySelector(
+    '.current__weather__container'
+  );
+
+  console.log('weather', weather);
+
+  currentWeatherContainer.textContent = '';
+  currentWeatherContainer.classList.remove('hidden')
+
+  const locationElement = document.createElement('h2');
+  locationElement.classList.add('locationElement')
+  locationElement.textContent = `Current Weather in ${weather.locationName}`;
+
+  const descriptionElement = document.createElement('p');
+  descriptionElement.textContent = `${weather.description}`;
+
+  const iconElement = document.createElement('img');
+  iconElement.src = `src/icons/${weather.icon}.png`;
+  iconElement.alt = `${weather.icon} icon`;
+
+  const tempElement = document.createElement('p');
+  tempElement.textContent = `${weather.temp}°`;
+
+  const conditionsElement = document.createElement('p');
+  conditionsElement.textContent = `${weather.conditions}`;
+
+  const precipProbElement = document.createElement('p');
+  precipProbElement.textContent = `${weather.precipprob}% chance of rain`;
+
+  [
+    locationElement,
+    iconElement,
+    tempElement,
+    conditionsElement,
+    precipProbElement,
+    descriptionElement,
+  ].forEach((element) => {
+    element.classList.add('element')
+    currentWeatherContainer.appendChild(element);
+  });
 }
 
 // Event listeners
